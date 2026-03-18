@@ -1,0 +1,106 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}Edit Task{% endblock %}
+{% block des_con %}abcd{% endblock %}
+{% block main_content %}
+
+    <!-- ========== MAIN ========== -->
+    <main class="page-container" style="max-width:680px;">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="{% url 'index' %}">Tasks</a>
+
+            <span class="breadcrumb-sep">›</span>
+
+            <a href="{% url 'detail_task' task.id %}">
+                {{ task.title }}
+            </a>
+
+            <span class="breadcrumb-sep">›</span>
+            <span>Edit</span>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-header-left">
+                <h1 class="page-title">Edit Task</h1>
+                <p class="page-subtitle">Update the task details below</p>
+            </div>
+        </div>
+
+        <!-- ===== FORM CARD ===== -->
+        <div class="card">
+            <div class="card-body">
+
+                <form method="POST" id="edit-form">
+                    {% csrf_token %}
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_title">
+                            Title <span class="required">*</span>
+                        </label>
+                        <input type="text" id="id_title" name="title" class="form-control"
+                               value="{{ task.title }}" maxlength="200" required autocomplete="off" />
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_description">Description</label>
+                        <textarea id="id_description" name="description" class="form-control"
+                            rows="4">{{ task.description }}</textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="id_priority">Priority</label>
+                            <select id="id_priority" name="priority" class="form-control">
+                                <option value="High" {% if task.priority == 'High' %}selected{% endif %}>
+                                🔴 High
+                                </option>
+                                <option value="Medium" {% if task.priority == 'Medium' %}selected{% endif %}>
+                                🟡 Medium
+                                </option>
+                                <option value="Low" {% if task.priority == 'Low' %}selected{% endif %}>
+                                🟢 Low
+                                </option>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="id_due_date">Due Date</label>
+                            <input type="date" id="id_due_date" name="due_date" class="form-control" value="{{ task.due_date|date:'Y-m-d' }}" />
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_status">Status</label>
+                        <select id="id_status" name="status" class="form-control">
+                            <option value="Active" {% if task.status == 'Active' %}selected{% endif %}>Active</option>
+                            <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
+                        </select>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_tags">
+                            Tags
+                            <span class="form-hint">Comma-separated, e.g. design, frontend</span>
+                        </label>
+                        <input type="text" id="id_tags" name="tags" class="form-control"
+                            value="design, frontend, urgent" autocomplete="off" />
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'delete_task' task.id %}" class="btn btn-danger btn-sm">✕ Delete</a>
+                <div style="flex:1;"></div>
+                <a href="{% url 'index' %}" class="btn btn-ghost">Cancel</a>
+                <button type="submit" form="edit-form" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+
+    </main>
+{% endblock %}

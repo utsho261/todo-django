@@ -1,0 +1,114 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}Task Details{% endblock %}
+{% block des_con %}abcd{% endblock %}
+{% block main_content %}
+
+    <!-- ========== MAIN ========== -->
+    <main class="page-container">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="{% url 'index' %}">Tasks</a>
+            <span class="breadcrumb-sep">›</span>
+            <span>{{ task.title }}</span>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-header-left">
+                <h1 class="page-title">{{ task.title }}</h1>
+
+                <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+                    <!-- Django: badge based on task.priority -->
+                    <span class="badge badge-{{ task.priority|lower }}">{{ task.priority }}</span>
+                    <!-- Django: badge based on task.status -->
+                    <span class="badge badge-{{ task.status|lower }}">{{ task.status }}</span>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div style="display:flex; gap:10px; flex-shrink:0;">
+                <a href="task_edit.html" class="btn btn-secondary">✎ Edit</a>
+                <a href="task_delete.html" class="btn btn-danger">✕ Delete</a>
+            </div>
+        </div>
+
+        <!-- ===== DETAIL GRID ===== -->
+        <div class="detail-grid">
+
+            <!-- LEFT: Main content -->
+            <div style="display:flex; flex-direction:column; gap:20px;">
+
+                <!-- Description -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="detail-section-title">Description</div>
+                        <p class="detail-body">
+                            {{ task.description|default:"No description provided." }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tags -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="detail-section-title">Tags</div>
+                        <div class="tags-row" style="margin-top:10px;">
+                            {% if tags_list %}
+                                {% for tag in tags_list %}
+                                    <span class="tag">{{ tag }}</span>
+                                {% endfor %}
+                            {% else %}
+                                 <span>No tags</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT: Meta sidebar -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="detail-section-title" style="margin-bottom:0;">Details</div>
+                    <div class="detail-meta-list">
+
+                        <div class="detail-meta-item">
+                            <span class="detail-meta-key">Status</span>
+                            <span class="badge badge-active">Active</span>
+                        </div>
+
+                        <div class="detail-meta-item">
+                            <span class="detail-meta-key">Priority</span>
+                            <span class="badge badge-high">High</span>
+                        </div>
+
+                        <div class="detail-meta-item">
+                            <span class="detail-meta-key">Due Date</span>
+                            <span class="detail-meta-val" style="color:var(--red);">{{ task.due_date|date:"M j, Y"|default:"-" }}</span>
+                        </div>
+
+                        <div class="detail-meta-item">
+                            <span class="detail-meta-key">Created</span>
+                            <span class="detail-meta-val">{{ task.created_at|date:"M j, Y" }}</span>
+                        </div>
+
+                        <div class="detail-meta-item">
+                            <span class="detail-meta-key">Updated</span>
+                            <span class="detail-meta-val">{{ task.updated_at|date:"M j, Y" }}</span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-footer" style="flex-direction:column;">
+                    <a href="{% url 'edit_task' task.id %}" class="btn btn-secondary">✎ Edit</a>
+                    <a href="{% url 'delete_task' task.id %}" class="btn btn-danger">✕ Delete</a>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+{% endblock %}

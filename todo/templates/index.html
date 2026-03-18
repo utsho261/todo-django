@@ -1,0 +1,169 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}Main Page / Index page{% endblock %}
+{% block des_con %}abcd{% endblock %}
+{% block main_content %}
+
+    <!-- ========== MAIN ========== -->
+    <main class="page-container">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-header-left">
+                <h1 class="page-title">My Tasks</h1>
+                <p class="page-subtitle">Manage and track your daily work</p>
+            </div>
+            <a href="{% url 'create_task' %}" class="btn btn-primary">＋ New Task</a>
+        </div>
+
+        <!-- <div class="alert alert-success">✓ Task deleted successfully.</div> -->
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+
+            <!-- TOTAL -->
+            <a href="{% url 'index' %}"
+               class="stat-card total {% if not current_status %}active-stat{% endif %}"
+               style="text-decoration:none;">
+
+                <div class="stat-value">{{ total_count }}</div>
+                <div class="stat-label">Total</div>
+
+            </a>
+
+            <!-- ACTIVE -->
+            <a href="?status=active"
+               class="stat-card active {% if current_status == 'active' %}active-stat{% endif %}"
+               style="text-decoration:none;">
+
+                <div class="stat-value">{{ active_count }}</div>
+                <div class="stat-label">Active</div>
+
+            </a>
+
+            <!-- COMPLETED -->
+            <a href="?status=completed"
+               class="stat-card completed {% if current_status == 'completed' %}active-stat{% endif %}"
+               style="text-decoration:none;">
+
+                <div class="stat-value">{{ completed_count }}</div>
+                <div class="stat-label">Completed</div>
+
+            </a>
+
+        </div>
+
+        <!-- Task Table Card -->
+        <div class="card">
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <a href="{% url 'index' %}"
+                       class="filter-chip {% if not current_status %}active{% endif %}">
+                        All
+                    </a>
+
+                    <a href="?status=active"
+                       class="filter-chip {% if current_status == 'active' %}active{% endif %}">
+                        Active
+                    </a>
+
+                    <a href="?status=completed"
+                       class="filter-chip {% if current_status == 'completed' %}active{% endif %}">
+                        Completed
+                    </a>
+                </div>
+
+                <div class="filter-group">
+                    <a href="?priority=high"
+                       class="filter-chip {% if current_priority == 'high' %}active{% endif %}">
+                        🔴 High
+                    </a>
+
+                    <a href="?priority=medium"
+                       class="filter-chip {% if current_priority == 'medium' %}active{% endif %}">
+                        🟡 Medium
+                    </a>
+
+                    <a href="?priority=low"
+                       class="filter-chip {% if current_priority == 'low' %}active{% endif %}">
+                        🟢 Low
+                    </a>
+                </div>
+            </div>
+
+            <!-- Task Table -->
+            <div class="task-table-wrap">
+                <table class="task-table">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Priority</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for task in tasks %}
+                    <tr>
+
+                        <!-- TITLE -->
+                        <td class="task-title-cell {% if task.status == 'Completed' %}done{% endif %}">
+                            {{ task.title }}
+                        </td>
+
+                        <!-- PRIORITY -->
+                        <td>
+                            <span class="badge
+                                {% if task.priority == 'High' %}badge-high
+                                {% elif task.priority == 'Medium' %}badge-medium
+                                {% elif task.priority == 'Low' %}badge-low
+                                {% endif %}">
+                                {{ task.priority|upper }}
+                            </span>
+                        </td>
+
+                        <!-- DUE DATE -->
+                        <td class="due-cell {% if task.due_date and task.due_date < now %}overdue{% endif %}">
+                            {% if task.due_date %}
+                              {{ task.due_date|date:"M j, Y" }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+
+                        <!-- STATUS -->
+                        <td>
+                            <span class="badge
+                                {% if task.status == 'Active' %}badge-active
+                                {% elif task.status == 'Completed' %}badge-completed
+                                {% endif %}">
+                                {{ task.status|upper }}
+                            </span>
+                        </td>
+
+                        <!-- ACTIONS -->
+                        <td>
+                            <div class="task-actions-cell">
+                                <a href="{% url 'detail_task' task.id %}" class="btn btn-ghost btn-sm btn-icon">👁</a>
+                                <a href="{% url 'edit_task' task.id %}" class="btn btn-ghost btn-sm btn-icon">✎</a>
+                                <a href="{% url 'delete_task' task.id %}" class="btn btn-ghost btn-sm btn-icon" style="color:var(--red);">✕</a>
+                            </div>
+                        </td>
+
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align:center;padding:30px;">
+                            No tasks found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}

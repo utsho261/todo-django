@@ -1,0 +1,65 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}Delete Task{% endblock %}
+{% block des_con %}abcd{% endblock %}
+{% block main_content %}
+
+    <!-- ========== MAIN ========== -->
+    <main class="page-container" style="max-width:560px;">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="{% url 'index' %}">Tasks</a>
+
+            <span class="breadcrumb-sep">›</span>
+
+            <a href="{% url 'detail_task' task.id %}">
+                {{ task.title }}
+            </a>
+
+            <span class="breadcrumb-sep">›</span>
+            <span>Delete</span>
+        </div>
+
+        <!-- ===== DELETE CONFIRM CARD ===== -->
+        <div class="card danger-card">
+            <div class="card-body">
+
+                <!-- Warning icon -->
+                <div class="danger-icon">⚠️</div>
+
+                <!-- Title + message -->
+                <div class="danger-title">Delete this task?</div>
+                <p class="danger-message">
+                    You are about to permanently delete this task. This action
+                    <strong>cannot be undone</strong>.
+                </p>
+
+                <!-- Task preview -->
+                <div class="task-preview-box">
+                    <div class="task-preview-title">
+                        Design the landing page
+                    </div>
+                    <div class="task-preview-meta">
+                        <span>🔴 High Priority</span>
+                        <span>📅 Due Mar 1, 2026</span>
+                        <span>● Active</span>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="card-footer" style="justify-content:flex-end;">
+                <a href="{% url 'detail_task' task.id %}" class="btn btn-ghost">Cancel, keep task</a>
+                <!-- Django: this button should be inside the POST form -->
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        Yes, delete task
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+{% endblock %}
