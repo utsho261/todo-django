@@ -160,5 +160,4 @@ GitHub: https://github.com/utsho261
 ---
 
 ## ⭐ Support
-
 If you like this project, please consider giving it a ⭐ on GitHub!
